@@ -348,15 +348,14 @@ const PaymentPopup = () => {
               ></iframe>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="supplier">Tedarikçi</Label>
+              <Label htmlFor="bank">Finansman Sağlayıcı</Label>
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Tedarikçi seçiniz" />
+                  <SelectValue placeholder="Banka seçiniz" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="supplier1">Tedarikçi A</SelectItem>
-                  <SelectItem value="supplier2">Tedarikçi B</SelectItem>
-                  <SelectItem value="supplier3">Tedarikçi C</SelectItem>
+                  <SelectItem value="hayat">Hayat Finans</SelectItem>
+                  <SelectItem value="kuveyt">Kuveyttürk Bankası</SelectItem>
                 </SelectContent>
               </Select>
             </div>
