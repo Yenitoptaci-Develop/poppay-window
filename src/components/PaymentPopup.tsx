@@ -91,6 +91,30 @@ const PaymentPopup = () => {
     // Ödeme işlemine devam et...
   };
 
+  const bankAccounts = [
+    {
+      bankName: "Garanti Bankası",
+      accountHolder: "ABC Teknoloji A.Ş.",
+      iban: "TR12 3456 7890 1234 5678 9012 34",
+      accountNumber: "1234567-8",
+      branchCode: "123"
+    },
+    {
+      bankName: "İş Bankası",
+      accountHolder: "ABC Teknoloji A.Ş.",
+      iban: "TR98 7654 3210 9876 5432 1098 76",
+      accountNumber: "87654321-9",
+      branchCode: "456"
+    },
+    {
+      bankName: "Yapı Kredi",
+      accountHolder: "ABC Teknoloji A.Ş.",
+      iban: "TR45 6789 0123 4567 8901 2345 67",
+      accountNumber: "2345678-9",
+      branchCode: "789"
+    }
+  ];
+
   const renderPaymentForm = () => {
     switch (selectedMethod) {
       case 'credit-card':
@@ -212,6 +236,61 @@ const PaymentPopup = () => {
                   </a>
                   {' '}okudum ve kabul ediyorum.
                 </label>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'bank-transfer':
+        return (
+          <div className="space-y-6">
+            {bankAccounts.map((account, index) => (
+              <div 
+                key={account.iban} 
+                className="p-4 bg-gray-50 rounded-lg space-y-3 border border-gray-200"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-lg text-purple-700">{account.bankName}</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-purple-600"
+                    onClick={() => {
+                      navigator.clipboard.writeText(account.iban);
+                      toast({
+                        title: "IBAN kopyalandı",
+                        description: "IBAN numarası panoya kopyalandı.",
+                      });
+                    }}
+                  >
+                    <CreditCard className="w-4 h-4 mr-2" />
+                    IBAN Kopyala
+                  </Button>
+                </div>
+                <div className="grid gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Hesap Sahibi:</span>
+                    <span className="font-medium">{account.accountHolder}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">IBAN:</span>
+                    <span className="font-medium font-mono">{account.iban}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Hesap No:</span>
+                    <span className="font-medium">{account.accountNumber}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Şube Kodu:</span>
+                    <span className="font-medium">{account.branchCode}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="p-4 bg-purple-50 rounded-lg">
+              <div className="flex justify-between items-center font-bold">
+                <span>Ödenecek Tutar:</span>
+                <span className="text-purple-700">{baseAmount.toFixed(2)} TL</span>
               </div>
             </div>
           </div>
