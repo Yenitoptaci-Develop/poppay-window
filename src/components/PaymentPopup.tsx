@@ -378,7 +378,7 @@ const PaymentPopup = () => {
                 <span className="font-medium">100.000 TL</span>
               </div>
               <div className="flex justify-between">
-                <span>Faiz Oranı:</span>
+                <span>Hizmet Bedeli:</span>
                 <span className="font-medium">%1.89</span>
               </div>
             </div>
