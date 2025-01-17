@@ -45,12 +45,11 @@ const paymentMethods = [
 const PaymentPopup = () => {
   const [selectedMethod, setSelectedMethod] = useState(paymentMethods[0].id);
   const [selectedInstallment, setSelectedInstallment] = useState('1');
-  const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
   const [saveCard, setSaveCard] = useState(false);
   const { toast } = useToast();
 
   const baseAmount = 750.00;
-  const currentBalance = 500.00; // Örnek bakiye
+  const currentBalance = 500.00;
 
   const calculateInstallmentAmount = (installment: string) => {
     const interestRates: { [key: string]: number } = {
@@ -155,41 +154,19 @@ const PaymentPopup = () => {
               )}
             </div>
 
-            <div className="flex items-start gap-2 mt-4">
-              <input
-                type="checkbox"
-                id="terms"
-                className="mt-1"
-                checked={hasAgreedToTerms}
-                onChange={(e) => setHasAgreedToTerms(e.target.checked)}
-              />
-              <label htmlFor="terms" className="text-sm text-gray-600">
-                <a 
-                  href="/siparis-sozlesmesi" 
-                  target="_blank" 
-                  className="text-purple-600 hover:underline"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.open('/siparis-sozlesmesi', '_blank');
-                  }}
-                >
-                  Sipariş sözleşmesini
-                </a>
-                {' '}okudum ve kabul ediyorum.
-              </label>
-            </div>
-
-            <div className="flex items-start gap-2 mt-4">
-              <input
-                type="checkbox"
-                id="saveCard"
-                className="mt-1"
-                checked={saveCard}
-                onChange={(e) => setSaveCard(e.target.checked)}
-              />
-              <label htmlFor="saveCard" className="text-sm text-gray-600">
-                Kartımı daha sonraki ödemelerim için kaydet
-              </label>
+            <div className="border-t border-gray-200 pt-4 mt-4">
+              <div className="flex items-start gap-2 mb-4">
+                <input
+                  type="checkbox"
+                  id="saveCard"
+                  className="mt-1"
+                  checked={saveCard}
+                  onChange={(e) => setSaveCard(e.target.checked)}
+                />
+                <label htmlFor="saveCard" className="text-sm text-gray-600">
+                  Kartımı daha sonraki ödemelerim için kaydet
+                </label>
+              </div>
             </div>
 
             <div className="space-y-2 mt-4">
@@ -209,29 +186,7 @@ const PaymentPopup = () => {
                       window.open('/on-bilgilendirme-formu', '_blank');
                     }}
                   >
-                    Ön bilgilendirme formunu
-                  </a>
-                  {' '}okudum ve kabul ediyorum.
-                </label>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  id="returnRights"
-                  className="mt-1"
-                />
-                <label htmlFor="returnRights" className="text-sm text-gray-600">
-                  <a 
-                    href="/iade-hakki" 
-                    target="_blank" 
-                    className="text-purple-600 hover:underline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.open('/iade-hakki', '_blank');
-                    }}
-                  >
-                    İade hakkı şartlarını
+                    Ön bilgilendirme formunu ve iade hakkı şartlarını
                   </a>
                   {' '}okudum ve kabul ediyorum.
                 </label>
@@ -369,7 +324,6 @@ const PaymentPopup = () => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl min-h-[500px] flex overflow-hidden">
-        {/* Payment Methods Sidebar */}
         <div className="w-80 bg-gray-50 p-6 border-r border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Ödeme Yöntemi</h2>
           <div className="space-y-2">
@@ -395,7 +349,6 @@ const PaymentPopup = () => {
           </div>
         </div>
 
-        {/* Payment Form Area */}
         <div className="flex-1 p-8">
           <div className="max-w-xl mx-auto">
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">
