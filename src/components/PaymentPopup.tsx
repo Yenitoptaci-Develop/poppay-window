@@ -42,10 +42,35 @@ const paymentMethods = [
 
 const PaymentPopup = () => {
   const [selectedMethod, setSelectedMethod] = useState(paymentMethods[0].id);
+  const [selectedInstallment, setSelectedInstallment] = useState('1');
+  const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
+
+  const baseAmount = 750.00; // Örnek tutar
+  
+  const calculateInstallmentAmount = (installment: string) => {
+    const interestRates: { [key: string]: number } = {
+      '1': 0,
+      '3': 0.05,
+      '6': 0.09,
+      '9': 0.13
+    };
+    
+    const rate = interestRates[installment] || 0;
+    const totalAmount = baseAmount * (1 + rate);
+    const monthlyAmount = totalAmount / Number(installment);
+    
+    return {
+      total: totalAmount.toFixed(2),
+      monthly: monthlyAmount.toFixed(2),
+      interestAmount: (totalAmount - baseAmount).toFixed(2)
+    };
+  };
 
   const renderPaymentForm = () => {
     switch (selectedMethod) {
       case 'credit-card':
+        const installmentDetails = calculateInstallmentAmount(selectedInstallment);
+        
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -68,7 +93,7 @@ const PaymentPopup = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="installment">Taksit Seçeneği</Label>
-              <Select>
+              <Select value={selectedInstallment} onValueChange={setSelectedInstallment}>
                 <SelectTrigger>
                   <SelectValue placeholder="Taksit seçiniz" />
                 </SelectTrigger>
@@ -79,6 +104,53 @@ const PaymentPopup = () => {
                   <SelectItem value="9">9 Taksit</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="mt-4 p-4 bg-purple-50 rounded-lg space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Ürün Tutarı:</span>
+                <span className="font-medium">{baseAmount.toFixed(2)} TL</span>
+              </div>
+              {selectedInstallment !== '1' && (
+                <div className="flex justify-between items-center text-purple-600">
+                  <span className="text-sm">Vade Farkı:</span>
+                  <span className="font-medium">+{installmentDetails.interestAmount} TL</span>
+                </div>
+              )}
+              <div className="flex justify-between items-center font-bold border-t border-purple-200 pt-2 mt-2">
+                <span>Toplam Tutar:</span>
+                <span>{installmentDetails.total} TL</span>
+              </div>
+              {selectedInstallment !== '1' && (
+                <div className="flex justify-between items-center text-sm text-purple-600">
+                  <span>Aylık Taksit Tutarı:</span>
+                  <span>{installmentDetails.monthly} TL</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-start gap-2 mt-4">
+              <input
+                type="checkbox"
+                id="terms"
+                className="mt-1"
+                checked={hasAgreedToTerms}
+                onChange={(e) => setHasAgreedToTerms(e.target.checked)}
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                <a 
+                  href="/siparis-sozlesmesi" 
+                  target="_blank" 
+                  className="text-purple-600 hover:underline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('/siparis-sozlesmesi', '_blank');
+                  }}
+                >
+                  Sipariş sözleşmesini
+                </a>
+                {' '}okudum ve kabul ediyorum.
+              </label>
             </div>
           </div>
         );
