@@ -5,12 +5,14 @@ import {
   Building,
   Wallet,
   Factory,
-  Smartphone
+  Smartphone,
+  Plus
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 
 const paymentMethods = [
   {
@@ -44,9 +46,12 @@ const PaymentPopup = () => {
   const [selectedMethod, setSelectedMethod] = useState(paymentMethods[0].id);
   const [selectedInstallment, setSelectedInstallment] = useState('1');
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
+  const [saveCard, setSaveCard] = useState(false);
+  const { toast } = useToast();
 
-  const baseAmount = 750.00; // Örnek tutar
-  
+  const baseAmount = 750.00;
+  const currentBalance = 500.00; // Örnek bakiye
+
   const calculateInstallmentAmount = (installment: string) => {
     const interestRates: { [key: string]: number } = {
       '1': 0,
@@ -64,6 +69,27 @@ const PaymentPopup = () => {
       monthly: monthlyAmount.toFixed(2),
       interestAmount: (totalAmount - baseAmount).toFixed(2)
     };
+  };
+
+  const handleBalancePayment = () => {
+    if (currentBalance < baseAmount) {
+      toast({
+        variant: "destructive",
+        title: "Yetersiz Bakiye",
+        description: "Bakiyeniz yetersiz. Lütfen bakiye yükleyiniz.",
+        action: (
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => window.location.href = '/bakiye-yukle'}
+          >
+            Bakiye Yükle
+          </Button>
+        ),
+      });
+      return;
+    }
+    // Ödeme işlemine devam et...
   };
 
   const renderPaymentForm = () => {
@@ -152,34 +178,86 @@ const PaymentPopup = () => {
                 {' '}okudum ve kabul ediyorum.
               </label>
             </div>
-          </div>
-        );
 
-      case 'bank-transfer':
-        return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="bank">Banka Seçimi</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Banka seçiniz" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ziraat">Ziraat Bankası</SelectItem>
-                  <SelectItem value="garanti">Garanti Bankası</SelectItem>
-                  <SelectItem value="isbank">İş Bankası</SelectItem>
-                  <SelectItem value="akbank">Akbank</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="flex items-start gap-2 mt-4">
+              <input
+                type="checkbox"
+                id="saveCard"
+                className="mt-1"
+                checked={saveCard}
+                onChange={(e) => setSaveCard(e.target.checked)}
+              />
+              <label htmlFor="saveCard" className="text-sm text-gray-600">
+                Kartımı daha sonraki ödemelerim için kaydet
+              </label>
             </div>
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm font-medium">IBAN: TR12 3456 7890 1234 5678 9012 34</p>
-              <p className="text-sm mt-2">Hesap Sahibi: Şirket Adı A.Ş.</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="referenceCode">Referans Kodu</Label>
-              <Input id="referenceCode" readOnly value="REF123456789" />
-              <p className="text-sm text-gray-500">Bu kodu havale açıklamasına eklemeyi unutmayınız.</p>
+
+            <div className="space-y-2 mt-4">
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="preInformation"
+                  className="mt-1"
+                />
+                <label htmlFor="preInformation" className="text-sm text-gray-600">
+                  <a 
+                    href="/on-bilgilendirme-formu" 
+                    target="_blank" 
+                    className="text-purple-600 hover:underline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('/on-bilgilendirme-formu', '_blank');
+                    }}
+                  >
+                    Ön bilgilendirme formunu
+                  </a>
+                  {' '}okudum ve kabul ediyorum.
+                </label>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="returnRights"
+                  className="mt-1"
+                />
+                <label htmlFor="returnRights" className="text-sm text-gray-600">
+                  <a 
+                    href="/iade-hakki" 
+                    target="_blank" 
+                    className="text-purple-600 hover:underline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('/iade-hakki', '_blank');
+                    }}
+                  >
+                    İade hakkı şartlarını
+                  </a>
+                  {' '}okudum ve kabul ediyorum.
+                </label>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="distanceSelling"
+                  className="mt-1"
+                />
+                <label htmlFor="distanceSelling" className="text-sm text-gray-600">
+                  <a 
+                    href="/mesafeli-satis-sozlesmesi" 
+                    target="_blank" 
+                    className="text-purple-600 hover:underline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('/mesafeli-satis-sozlesmesi', '_blank');
+                    }}
+                  >
+                    Mesafeli satış sözleşmesini
+                  </a>
+                  {' '}okudum ve kabul ediyorum.
+                </label>
+              </div>
             </div>
           </div>
         );
@@ -190,17 +268,34 @@ const PaymentPopup = () => {
             <div className="p-4 bg-gray-50 rounded-lg">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Mevcut Bakiye</span>
-                <span className="text-lg font-bold text-green-600">1.250,00 TL</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-green-600">{currentBalance.toFixed(2)} TL</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => window.location.href = '/bakiyem'}
+                  >
+                    <Plus className="w-4 h-4" />
+                    Bakiye Yükle
+                  </Button>
+                </div>
               </div>
               <div className="flex justify-between items-center mt-2">
                 <span className="font-medium">Ödenecek Tutar</span>
-                <span className="text-lg font-bold text-purple-600">750,00 TL</span>
+                <span className="text-lg font-bold text-purple-600">{baseAmount.toFixed(2)} TL</span>
               </div>
               <div className="flex justify-between items-center mt-2">
                 <span className="font-medium">Kalan Bakiye</span>
-                <span className="text-lg font-bold">500,00 TL</span>
+                <span className="text-lg font-bold">{(currentBalance - baseAmount).toFixed(2)} TL</span>
               </div>
             </div>
+            <Button 
+              className="w-full" 
+              onClick={handleBalancePayment}
+              disabled={currentBalance < baseAmount}
+            >
+              {currentBalance < baseAmount ? 'Yetersiz Bakiye' : 'Bakiye ile Öde'}
+            </Button>
           </div>
         );
 
