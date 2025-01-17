@@ -335,8 +335,8 @@ const PaymentPopup = () => {
 
       case 'supplier':
         return (
-          <div className="space-y-4">
-            <div className="aspect-video w-full rounded-lg overflow-hidden mb-6">
+          <div className="space-y-4 max-h-[calc(100vh-16rem)] overflow-y-auto px-1">
+            <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
               <iframe
                 width="100%"
                 height="100%"
@@ -345,6 +345,7 @@ const PaymentPopup = () => {
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                className="w-full h-full"
               ></iframe>
             </div>
             <div className="mt-4 space-y-2 text-sm text-gray-600 bg-purple-50 p-4 rounded-lg">
@@ -354,7 +355,7 @@ const PaymentPopup = () => {
             <div className="space-y-2">
               <Label htmlFor="bank">Finansman Sağlayıcı</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Banka seçiniz" />
                 </SelectTrigger>
                 <SelectContent>
@@ -366,7 +367,7 @@ const PaymentPopup = () => {
             <div className="space-y-2">
               <Label htmlFor="term">Vade</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Vade seçiniz" />
                 </SelectTrigger>
                 <SelectContent>
@@ -401,6 +402,11 @@ const PaymentPopup = () => {
                 <span>Aylık Ödeme:</span>
                 <span>{(baseAmount * 1.0189 / 3).toFixed(2)} TL</span>
               </div>
+            </div>
+            <div className="sticky bottom-0 pt-4 bg-white">
+              <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
+                Finansman Başvurusu Yap
+              </Button>
             </div>
           </div>
         );
@@ -487,3 +493,4 @@ const PaymentPopup = () => {
 };
 
 export default PaymentPopup;
+
