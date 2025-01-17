@@ -336,6 +336,17 @@ const PaymentPopup = () => {
       case 'supplier':
         return (
           <div className="space-y-4">
+            <div className="aspect-video w-full rounded-lg overflow-hidden mb-6">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                title="Tedarikçi Finansmanı Nasıl Çalışır?"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="supplier">Tedarikçi</Label>
               <Select>
