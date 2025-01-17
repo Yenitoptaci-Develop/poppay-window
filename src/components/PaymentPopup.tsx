@@ -385,6 +385,22 @@ const PaymentPopup = () => {
                 <span>Hizmet Bedeli:</span>
                 <span className="font-medium">%1.89</span>
               </div>
+              <div className="flex justify-between border-t border-gray-200 pt-2 mt-2">
+                <span>Ürün Tutarı:</span>
+                <span className="font-medium">{baseAmount.toFixed(2)} TL</span>
+              </div>
+              <div className="flex justify-between text-purple-600">
+                <span>Hizmet Bedeli Tutarı:</span>
+                <span className="font-medium">+{(baseAmount * 0.0189).toFixed(2)} TL</span>
+              </div>
+              <div className="flex justify-between font-bold border-t border-gray-200 pt-2 mt-2">
+                <span>Toplam Tutar:</span>
+                <span>{(baseAmount * 1.0189).toFixed(2)} TL</span>
+              </div>
+              <div className="flex justify-between text-sm text-purple-600">
+                <span>Aylık Ödeme:</span>
+                <span>{(baseAmount * 1.0189 / 3).toFixed(2)} TL</span>
+              </div>
             </div>
           </div>
         );
