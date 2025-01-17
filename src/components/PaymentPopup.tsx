@@ -7,6 +7,10 @@ import {
   Factory,
   Smartphone
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const paymentMethods = [
   {
@@ -38,6 +42,162 @@ const paymentMethods = [
 
 const PaymentPopup = () => {
   const [selectedMethod, setSelectedMethod] = useState(paymentMethods[0].id);
+
+  const renderPaymentForm = () => {
+    switch (selectedMethod) {
+      case 'credit-card':
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="cardNumber">Kart Numarası</Label>
+              <Input id="cardNumber" placeholder="1234 5678 9012 3456" maxLength={19} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="expiryDate">Son Kullanma Tarihi</Label>
+                <Input id="expiryDate" placeholder="MM/YY" maxLength={5} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="cvv">CVV/CVC</Label>
+                <Input id="cvv" placeholder="123" maxLength={3} type="password" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cardHolder">Kart Sahibinin Adı Soyadı</Label>
+              <Input id="cardHolder" placeholder="Ad Soyad" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="installment">Taksit Seçeneği</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Taksit seçiniz" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">Tek Çekim</SelectItem>
+                  <SelectItem value="3">3 Taksit</SelectItem>
+                  <SelectItem value="6">6 Taksit</SelectItem>
+                  <SelectItem value="9">9 Taksit</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        );
+
+      case 'bank-transfer':
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="bank">Banka Seçimi</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Banka seçiniz" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ziraat">Ziraat Bankası</SelectItem>
+                  <SelectItem value="garanti">Garanti Bankası</SelectItem>
+                  <SelectItem value="isbank">İş Bankası</SelectItem>
+                  <SelectItem value="akbank">Akbank</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium">IBAN: TR12 3456 7890 1234 5678 9012 34</p>
+              <p className="text-sm mt-2">Hesap Sahibi: Şirket Adı A.Ş.</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="referenceCode">Referans Kodu</Label>
+              <Input id="referenceCode" readOnly value="REF123456789" />
+              <p className="text-sm text-gray-500">Bu kodu havale açıklamasına eklemeyi unutmayınız.</p>
+            </div>
+          </div>
+        );
+
+      case 'balance':
+        return (
+          <div className="space-y-4">
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Mevcut Bakiye</span>
+                <span className="text-lg font-bold text-green-600">1.250,00 TL</span>
+              </div>
+              <div className="flex justify-between items-center mt-2">
+                <span className="font-medium">Ödenecek Tutar</span>
+                <span className="text-lg font-bold text-purple-600">750,00 TL</span>
+              </div>
+              <div className="flex justify-between items-center mt-2">
+                <span className="font-medium">Kalan Bakiye</span>
+                <span className="text-lg font-bold">500,00 TL</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'supplier':
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="supplier">Tedarikçi</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Tedarikçi seçiniz" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="supplier1">Tedarikçi A</SelectItem>
+                  <SelectItem value="supplier2">Tedarikçi B</SelectItem>
+                  <SelectItem value="supplier3">Tedarikçi C</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="term">Vade</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Vade seçiniz" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="30">30 Gün</SelectItem>
+                  <SelectItem value="60">60 Gün</SelectItem>
+                  <SelectItem value="90">90 Gün</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-lg space-y-2">
+              <div className="flex justify-between">
+                <span>Finansman Limiti:</span>
+                <span className="font-medium">100.000 TL</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Faiz Oranı:</span>
+                <span className="font-medium">%1.89</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'papara':
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="paparaNumber">Papara Numarası</Label>
+              <Input id="paparaNumber" placeholder="Papara numaranızı giriniz" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="paparaEmail">E-posta veya Telefon</Label>
+              <Input id="paparaEmail" placeholder="E-posta veya telefon numaranız" />
+            </div>
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Ödenecek Tutar</span>
+                <span className="text-lg font-bold text-purple-600">750,00 TL</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
@@ -75,11 +235,10 @@ const PaymentPopup = () => {
               {paymentMethods.find(m => m.id === selectedMethod)?.name}
             </h3>
             
-            {/* Placeholder for payment form content */}
-            <div className="space-y-4">
-              <div className="h-12 bg-gray-100 rounded-lg animate-pulse"></div>
-              <div className="h-12 bg-gray-100 rounded-lg animate-pulse"></div>
-              <div className="h-12 bg-gray-100 rounded-lg animate-pulse"></div>
+            {renderPaymentForm()}
+
+            <div className="mt-8">
+              <Button className="w-full">Ödemeyi Tamamla</Button>
             </div>
           </div>
         </div>
