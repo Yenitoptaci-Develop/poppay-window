@@ -347,6 +347,10 @@ const PaymentPopup = () => {
                 allowFullScreen
               ></iframe>
             </div>
+            <div className="mt-4 space-y-2 text-sm text-gray-600 bg-purple-50 p-4 rounded-lg">
+              <p>Şirketiniz aktif ve 1 yıldır faaliyette olmalıdır.</p>
+              <p>Limit sorgulaması için gerekli evrakların profil sayfanızda yüklenmesi gerekmektedir.</p>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="bank">Finansman Sağlayıcı</Label>
               <Select>
