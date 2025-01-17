@@ -116,6 +116,54 @@ const PaymentPopup = () => {
   ];
 
   const renderPaymentForm = () => {
+    const renderAgreementCheckboxes = () => (
+      <div className="space-y-2 mt-4">
+        <div className="flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="preInformation"
+            className="mt-1"
+          />
+          <label htmlFor="preInformation" className="text-sm text-gray-600">
+            <a 
+              href="/on-bilgilendirme-formu" 
+              target="_blank" 
+              className="text-purple-600 hover:underline"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open('/on-bilgilendirme-formu', '_blank');
+              }}
+            >
+              Ön bilgilendirme formunu ve iade hakkı şartlarını
+            </a>
+            {' '}okudum ve kabul ediyorum.
+          </label>
+        </div>
+
+        <div className="flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="distanceSelling"
+            className="mt-1"
+          />
+          <label htmlFor="distanceSelling" className="text-sm text-gray-600">
+            <a 
+              href="/mesafeli-satis-sozlesmesi" 
+              target="_blank" 
+              className="text-purple-600 hover:underline"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open('/mesafeli-satis-sozlesmesi', '_blank');
+              }}
+            >
+              Mesafeli satış sözleşmesini
+            </a>
+            {' '}okudum ve kabul ediyorum.
+          </label>
+        </div>
+      </div>
+    );
+
     switch (selectedMethod) {
       case 'credit-card':
         const installmentDetails = calculateInstallmentAmount(selectedInstallment);
@@ -193,51 +241,7 @@ const PaymentPopup = () => {
               </div>
             </div>
 
-            <div className="space-y-2 mt-4">
-              <div className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  id="preInformation"
-                  className="mt-1"
-                />
-                <label htmlFor="preInformation" className="text-sm text-gray-600">
-                  <a 
-                    href="/on-bilgilendirme-formu" 
-                    target="_blank" 
-                    className="text-purple-600 hover:underline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.open('/on-bilgilendirme-formu', '_blank');
-                    }}
-                  >
-                    Ön bilgilendirme formunu ve iade hakkı şartlarını
-                  </a>
-                  {' '}okudum ve kabul ediyorum.
-                </label>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  id="distanceSelling"
-                  className="mt-1"
-                />
-                <label htmlFor="distanceSelling" className="text-sm text-gray-600">
-                  <a 
-                    href="/mesafeli-satis-sozlesmesi" 
-                    target="_blank" 
-                    className="text-purple-600 hover:underline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.open('/mesafeli-satis-sozlesmesi', '_blank');
-                    }}
-                  >
-                    Mesafeli satış sözleşmesini
-                  </a>
-                  {' '}okudum ve kabul ediyorum.
-                </label>
-              </div>
-            </div>
+            {renderAgreementCheckboxes()}
           </div>
         );
 
@@ -293,6 +297,8 @@ const PaymentPopup = () => {
                 <span className="text-purple-700">{baseAmount.toFixed(2)} TL</span>
               </div>
             </div>
+
+            {renderAgreementCheckboxes()}
           </div>
         );
 
@@ -330,6 +336,8 @@ const PaymentPopup = () => {
             >
               {currentBalance < baseAmount ? 'Yetersiz Bakiye' : 'Bakiye ile Öde'}
             </Button>
+
+            {renderAgreementCheckboxes()}
           </div>
         );
 
@@ -404,6 +412,7 @@ const PaymentPopup = () => {
               </div>
             </div>
             <div className="sticky bottom-0 pt-4 bg-white">
+              {renderAgreementCheckboxes()}
               <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
                 Finansman Başvurusu Yap
               </Button>
@@ -428,10 +437,10 @@ const PaymentPopup = () => {
                 <span className="text-lg font-bold text-purple-600">750,00 TL</span>
               </div>
             </div>
+            {renderAgreementCheckboxes()}
             <Button 
               className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3"
               onClick={() => {
-                // Here you would typically redirect to Papara's payment page
                 window.location.href = 'https://papara.com/payment';
               }}
             >
@@ -493,4 +502,3 @@ const PaymentPopup = () => {
 };
 
 export default PaymentPopup;
-
